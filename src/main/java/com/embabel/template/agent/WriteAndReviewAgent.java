@@ -108,7 +108,7 @@ class WriteAndReviewAgent {
     ReviewedStory reviewStory(UserInput userInput, Story story, OperationContext context) {
         var review = context
                 .ai()
-                .withAutoLlm()
+                .withDefaultLlm()
                 .withPromptContributor(Personas.REVIEWER)
                 .generateText(String.format("""
                                 You will be given a short story to review.
@@ -139,8 +139,10 @@ class WriteAndReviewAgent {
         return context.ai()
                 // Higher temperature for more creative output
                 .withLlm(LlmOptions
-                        .withModel(OpenAiModels.GPT_41_MINI)
-                        .withTemperature(.7))
+                        // .withModel(OpenAiModels.GPT_41_MINI)
+						.withDefaultLlm()
+                        // .withTemperature(.7)
+				)
                 .withPromptContributor(Personas.WRITER)
                 .createObject(String.format("""
                                 Craft a short story in %d words or less.
